@@ -29,6 +29,8 @@ name = "aether-runtime"
 version = "0.1.0"
 dependencies = [
  "aether-sdk",
+ "blake3",
+ "serde_json",
  "thiserror 2.0.18",
  "tokio",
  "wasmtime",

@@ -75,6 +75,12 @@ impl Sandbox {
         })
     }
 
+    /// The process-shared engine. The blueprint cache (U6) precompiles and loads
+    /// AOT artifacts against this exact engine so they stay compatible.
+    pub fn engine(&self) -> &Engine {
+        &self.engine
+    }
+
     /// Instantiate `wasm` (core module, `.wat` text or binary) and call the
     /// nullary exported function `func`, returning its `i32` result.
     ///
@@ -83,7 +89,17 @@ impl Sandbox {
     pub async fn run_i32(&self, wasm: &[u8], func: &str, limits: &ExecLimits) -> Result<i32> {
         let module = Module::new(&self.engine, wasm)
             .map_err(|e| AetherError::SandboxTrap(format!("module load failed: {e}")))?;
+        self.run_module_i32(&module, func, limits).await
+    }
 
+    /// Run an already-loaded module — the cache-hit path, where the module came
+    /// from a deserialized AOT artifact (U6) rather than a fresh compile.
+    pub async fn run_module_i32(
+        &self,
+        module: &Module,
+        func: &str,
+        limits: &ExecLimits,
+    ) -> Result<i32> {
         let mut store = Store::new(&self.engine, HostState::new(limits.store_limits()));
         store.limiter(|state| &mut state.limits);
 
@@ -100,7 +116,7 @@ impl Sandbox {
 
         let call = async {
             let instance = linker
-                .instantiate_async(&mut store, &module)
+                .instantiate_async(&mut store, module)
                 .await
                 .map_err(map_trap)?;
             let typed = instance
