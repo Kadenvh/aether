@@ -5,7 +5,11 @@
 //! driver (U12).
 
 pub mod agents;
+pub mod build_sandbox;
 pub mod intent_parse;
 pub mod llm;
+pub mod rustc_driver;
 pub mod synth;
 pub mod tdag;
+
+pub use rustc_driver::RustcDriver;

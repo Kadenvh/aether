@@ -15,5 +15,10 @@ tokio.workspace = true
 async-trait.workspace = true
 petgraph.workspace = true
 
+# The locked build sandbox (U12) is Linux-only: seccomp egress denial + rlimits.
+[target.'cfg(target_os = "linux")'.dependencies]
+libc.workspace = true
+seccompiler.workspace = true
+
 [dev-dependencies]
 tokio = { workspace = true }
