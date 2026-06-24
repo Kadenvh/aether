@@ -1,0 +1,22 @@
+# Rust build artifacts
+/target
+**/*.rs.bk
+Cargo.lock.bak
+
+# AETHER runtime artifacts
+*.db
+*.db-*
+/.aether-cache/
+/blueprint-cache/
+
+# Subagent worktrees (ce-work parallel isolation)
+/.claude/worktrees/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db

@@ -1,0 +1,13 @@
+[package]
+name = "aether-sdk"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "AETHER shared vocabulary: intent, t-DAG, capability, mutation, ledger trait, and error types."
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+blake3.workspace = true

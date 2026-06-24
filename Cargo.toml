@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = ["crates/sdk"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+rust-version = "1.96"
+repository = "https://github.com/aether-engine/aether"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+blake3 = "1"
