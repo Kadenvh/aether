@@ -22,6 +22,12 @@ pub enum AetherError {
     #[error("compilation failed: {0}")]
     CompileFailed(String),
 
+    #[error("LLM error: {0}")]
+    Llm(String),
+
+    #[error("LLM refused the request: {0}")]
+    LlmRefusal(String),
+
     #[error("sandbox trap: {0}")]
     SandboxTrap(String),
 
