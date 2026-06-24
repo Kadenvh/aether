@@ -12,3 +12,4 @@ serde.workspace = true
 serde_json.workspace = true
 jsonschema.workspace = true
 thiserror.workspace = true
+z3.workspace = true

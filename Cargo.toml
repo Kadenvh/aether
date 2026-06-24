@@ -20,5 +20,6 @@ petgraph = "0.8"
 wasmtime = "46"
 wasmtime-wasi = "46"
 jsonschema = "0.46"
+z3 = { version = "0.20.1", features = ["vendored"] }
 cozo = { version = "0.7.6", default-features = false, features = ["minimal", "graph-algo"] }
 aether-sdk = { path = "crates/sdk" }
