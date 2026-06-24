@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aether.engine/schemas/mutation.schema.json",
+  "title": "AETHER Mutation",
+  "description": "A single semantic-ledger assertion (subject-predicate-object triple). Flat, closed-world record validation (KTD4) — not SHACL/RDF.",
+  "type": "object",
+  "properties": {
+    "subject": { "type": "string", "minLength": 1 },
+    "predicate": { "type": "string", "minLength": 1 },
+    "object": { "type": "string", "minLength": 1 }
+  },
+  "required": ["subject", "predicate", "object"],
+  "additionalProperties": false
+}
