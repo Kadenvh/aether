@@ -4,6 +4,7 @@
 //! the t-DAG model (U9), the synthesis agents (U10/U11), and the rustc→WASM
 //! driver (U12).
 
+pub mod agents;
 pub mod intent_parse;
 pub mod llm;
 pub mod tdag;

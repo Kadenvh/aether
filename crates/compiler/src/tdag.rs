@@ -73,11 +73,19 @@ mod tests {
     use aether_sdk::types::{NodeKind, TDagEdge, TDagNode};
 
     fn node(id: &str, kind: NodeKind) -> TDagNode {
-        TDagNode { id: id.into(), kind, spec: serde_json::Value::Null }
+        TDagNode {
+            id: id.into(),
+            kind,
+            spec: serde_json::Value::Null,
+        }
     }
 
     fn edge(from: &str, to: &str) -> TDagEdge {
-        TDagEdge { from: from.into(), to: to.into(), kind: EdgeKind::DataFlow }
+        TDagEdge {
+            from: from.into(),
+            to: to.into(),
+            kind: EdgeKind::DataFlow,
+        }
     }
 
     fn diamond() -> TDag {
@@ -89,7 +97,12 @@ mod tests {
                 node("c", NodeKind::Transform),
                 node("d", NodeKind::Persist),
             ],
-            edges: vec![edge("a", "b"), edge("a", "c"), edge("b", "d"), edge("c", "d")],
+            edges: vec![
+                edge("a", "b"),
+                edge("a", "c"),
+                edge("b", "d"),
+                edge("c", "d"),
+            ],
         }
     }
 

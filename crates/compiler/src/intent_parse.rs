@@ -77,12 +77,18 @@ mod tests {
 
     #[test]
     fn rejects_malformed_json() {
-        assert!(matches!(parse_intent("{ not json"), Err(AetherError::Serde(_))));
+        assert!(matches!(
+            parse_intent("{ not json"),
+            Err(AetherError::Serde(_))
+        ));
     }
 
     #[test]
     fn rejects_empty_objective_at_boundary() {
         let json = r#"{"objective": "", "invariants": []}"#;
-        assert!(matches!(parse_intent(json), Err(AetherError::IntentInvalid(_))));
+        assert!(matches!(
+            parse_intent(json),
+            Err(AetherError::IntentInvalid(_))
+        ));
     }
 }

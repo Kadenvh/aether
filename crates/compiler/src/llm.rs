@@ -67,10 +67,16 @@ pub struct Message {
 
 impl Message {
     pub fn user(content: impl Into<String>) -> Self {
-        Message { role: "user".into(), content: content.into() }
+        Message {
+            role: "user".into(),
+            content: content.into(),
+        }
     }
     pub fn assistant(content: impl Into<String>) -> Self {
-        Message { role: "assistant".into(), content: content.into() }
+        Message {
+            role: "assistant".into(),
+            content: content.into(),
+        }
     }
 }
 
@@ -167,7 +173,10 @@ pub struct RetryConfig {
 
 impl Default for RetryConfig {
     fn default() -> Self {
-        RetryConfig { max_retries: 2, base_delay_ms: 500 }
+        RetryConfig {
+            max_retries: 2,
+            base_delay_ms: 500,
+        }
     }
 }
 
@@ -182,7 +191,10 @@ pub struct LlmClient<T: Transport> {
 
 impl<T: Transport> LlmClient<T> {
     pub fn new(transport: T) -> Self {
-        LlmClient { transport, retry: RetryConfig::default() }
+        LlmClient {
+            transport,
+            retry: RetryConfig::default(),
+        }
     }
 
     pub fn with_retry(transport: T, retry: RetryConfig) -> Self {
@@ -277,7 +289,9 @@ impl<T: Transport> LlmClient<T> {
             .into_iter()
             .find(|t| t.name == tool_name)
             .ok_or_else(|| {
-                AetherError::Llm(format!("response contained no '{tool_name}' tool_use block"))
+                AetherError::Llm(format!(
+                    "response contained no '{tool_name}' tool_use block"
+                ))
             })?;
         serde_json::from_value(tool_use.input)
             .map_err(|e| AetherError::Llm(format!("tool '{tool_name}' output failed schema: {e}")))
@@ -321,7 +335,12 @@ impl<T: Transport> LlmClient<T> {
             }
         }
 
-        Ok(Completion { model, stop_reason, text, tool_uses })
+        Ok(Completion {
+            model,
+            stop_reason,
+            text,
+            tool_uses,
+        })
     }
 }
 
@@ -397,7 +416,11 @@ impl Transport for ReqwestTransport {
             let code = status.as_u16();
             let retryable = code == 429 || code >= 500;
             let detail = resp.text().await.unwrap_or_default();
-            Err(TransportError { status: Some(code), retryable, message: detail })
+            Err(TransportError {
+                status: Some(code),
+                retryable,
+                message: detail,
+            })
         }
     }
 }
@@ -425,7 +448,10 @@ mod tests {
         ) -> (Self, Arc<AtomicU32>) {
             let calls = Arc::new(AtomicU32::new(0));
             (
-                MockTransport { responses: std::sync::Mutex::new(responses), calls: calls.clone() },
+                MockTransport {
+                    responses: std::sync::Mutex::new(responses),
+                    calls: calls.clone(),
+                },
                 calls,
             )
         }
@@ -453,7 +479,10 @@ mod tests {
     }
 
     fn no_delay() -> RetryConfig {
-        RetryConfig { max_retries: 2, base_delay_ms: 0 }
+        RetryConfig {
+            max_retries: 2,
+            base_delay_ms: 0,
+        }
     }
 
     fn tdag_tool() -> ToolDef {
@@ -492,7 +521,10 @@ mod tests {
         assert_eq!(body["thinking"]["type"], "adaptive");
         assert_eq!(body["output_config"]["effort"], "high");
         assert_eq!(body["tools"][0]["strict"], true);
-        assert_eq!(body["tools"][0]["input_schema"]["additionalProperties"], false);
+        assert_eq!(
+            body["tools"][0]["input_schema"]["additionalProperties"],
+            false
+        );
         assert_eq!(body["tool_choice"]["type"], "tool");
         assert_eq!(body["tool_choice"]["name"], "emit_tdag");
     }
@@ -587,6 +619,9 @@ mod tests {
     fn resolve_api_key_requires_present_nonempty_key() {
         assert!(resolve_api_key(|_| None).is_err());
         assert!(resolve_api_key(|_| Some("  ".into())).is_err());
-        assert_eq!(resolve_api_key(|_| Some("sk-abc".into())).unwrap(), "sk-abc");
+        assert_eq!(
+            resolve_api_key(|_| Some("sk-abc".into())).unwrap(),
+            "sk-abc"
+        );
     }
 }
