@@ -9,7 +9,11 @@ pub mod blueprint_cache;
 pub mod exec;
 pub mod host;
 pub mod limits;
+pub mod net_guard;
+pub mod wasi_caps;
 
 pub use blueprint_cache::BlueprintCache;
 pub use exec::Sandbox;
 pub use limits::ExecLimits;
+pub use net_guard::NetGuard;
+pub use wasi_caps::{build_wasi_ctx, WasiHost};

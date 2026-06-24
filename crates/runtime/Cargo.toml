@@ -9,6 +9,7 @@ description = "AETHER TAR: isolated, fuel-metered, time-bounded Wasmtime executi
 [dependencies]
 aether-sdk.workspace = true
 wasmtime = { workspace = true, features = ["async"] }
+wasmtime-wasi.workspace = true
 tokio.workspace = true
 thiserror.workspace = true
 blake3.workspace = true
