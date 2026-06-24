@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/sdk", "crates/compiler"]
+members = ["crates/sdk", "crates/compiler", "crates/runtime"]
 
 [workspace.package]
 edition = "2021"
@@ -17,4 +17,6 @@ reqwest = { version = "0.12", default-features = false, features = ["json", "rus
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
 async-trait = "0.1"
 petgraph = "0.8"
+wasmtime = "46"
+wasmtime-wasi = "46"
 aether-sdk = { path = "crates/sdk" }

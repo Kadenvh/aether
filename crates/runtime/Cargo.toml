@@ -1,0 +1,16 @@
+[package]
+name = "aether-runtime"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "AETHER TAR: isolated, fuel-metered, time-bounded Wasmtime execution sandboxes."
+
+[dependencies]
+aether-sdk.workspace = true
+wasmtime = { workspace = true, features = ["async"] }
+tokio.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true }
