@@ -7,4 +7,5 @@
 pub mod agents;
 pub mod intent_parse;
 pub mod llm;
+pub mod synth;
 pub mod tdag;
