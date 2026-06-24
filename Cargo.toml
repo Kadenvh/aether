@@ -16,4 +16,5 @@ blake3 = "1"
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
 async-trait = "0.1"
+petgraph = "0.8"
 aether-sdk = { path = "crates/sdk" }
