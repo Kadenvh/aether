@@ -1,0 +1,28 @@
+[package]
+name = "aether-cli"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "AETHER CLI: the `aether run` end-to-end ephemeral-pipeline orchestrator and `aether watch` daemon."
+
+[lib]
+name = "aether_cli"
+path = "src/lib.rs"
+
+[[bin]]
+name = "aether"
+path = "src/main.rs"
+
+[dependencies]
+aether-sdk.workspace = true
+aether-compiler.workspace = true
+aether-runtime.workspace = true
+aether-verifier.workspace = true
+aether-ledger.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+async-trait.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true }

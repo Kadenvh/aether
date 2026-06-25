@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/sdk", "crates/compiler", "crates/runtime", "crates/verifier", "crates/ledger"]
+members = ["crates/sdk", "crates/compiler", "crates/runtime", "crates/verifier", "crates/ledger", "cli"]
 
 [workspace.package]
 edition = "2021"
@@ -25,3 +25,7 @@ cozo = { version = "0.7.6", default-features = false, features = ["minimal", "gr
 libc = "0.2"
 seccompiler = "0.5"
 aether-sdk = { path = "crates/sdk" }
+aether-compiler = { path = "crates/compiler" }
+aether-runtime = { path = "crates/runtime" }
+aether-verifier = { path = "crates/verifier" }
+aether-ledger = { path = "crates/ledger" }

@@ -1,0 +1,7 @@
+{
+  "objective": "Import partner utility bills, convert Euros to USD, flag lines with anomalous variance > 20% compared to historical average, and save to ledger",
+  "invariants": [
+    "usd_amount >= 0.0",
+    "partner_id must match known_partners in local state"
+  ]
+}
