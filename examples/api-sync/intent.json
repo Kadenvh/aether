@@ -1,0 +1,6 @@
+{
+  "objective": "Ingest reconciled invoice totals, then synchronize each verified record to the partner billing API at the approved endpoint, recording the sync outcome in the ledger",
+  "invariants": [
+    "usd_amount >= 0.0"
+  ]
+}

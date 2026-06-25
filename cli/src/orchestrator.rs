@@ -62,14 +62,16 @@ impl<T: Transport> NodeSynthesizer for LlmSynthesizer<T> {
     }
 }
 
-/// A compact natural-language spec handed to the Compiler Agent for a node.
+/// A compact natural-language spec handed to the Compiler Agent for a node,
+/// including the kind-specific template hint from the node library (U15).
 fn node_spec(node: &TDagNode) -> String {
     format!(
-        "Node id: {id}\nKind: {kind:?}\nSpec: {spec}\n\
+        "Node id: {id}\nKind: {kind:?}\nSpec: {spec}\n{hint}\n\
          Implement an exported `fn {entry}() -> i32` returning this node's integer-cents result.",
         id = node.id,
         kind = node.kind,
         spec = node.spec,
+        hint = aether_compiler::nodes::template_hint(node.kind),
         entry = NODE_ENTRY,
     )
 }

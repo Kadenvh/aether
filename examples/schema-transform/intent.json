@@ -1,0 +1,6 @@
+{
+  "objective": "Ingest a CSV of product records, rename legacy columns to the canonical schema, derive a total_cents column from quantity and unit_price_cents, and save the transformed records to the ledger",
+  "invariants": [
+    "usd_amount >= 0.0"
+  ]
+}

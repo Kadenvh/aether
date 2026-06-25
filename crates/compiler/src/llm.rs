@@ -359,6 +359,9 @@ pub fn resolve_api_key<F: Fn(&str) -> Option<String>>(lookup: F) -> Result<Strin
     }
 }
 
+/// Cloneable (reqwest::Client is internally `Arc`-backed) so the SAA, CA, and
+/// CRA agents can share a single transport in the orchestrator (U13).
+#[derive(Clone)]
 pub struct ReqwestTransport {
     client: reqwest::Client,
     api_key: String,

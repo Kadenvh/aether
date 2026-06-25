@@ -8,6 +8,7 @@ pub mod agents;
 pub mod build_sandbox;
 pub mod intent_parse;
 pub mod llm;
+pub mod nodes;
 pub mod rustc_driver;
 pub mod synth;
 pub mod tdag;
