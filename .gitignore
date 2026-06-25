@@ -24,3 +24,7 @@ Thumbs.db
 # Apalache model-check output
 verification/tla/_apalache-out/
 verification/kani/target/
+
+# Local tooling / machine config (not part of AETHER)
+.claude/
+.mcp.json
