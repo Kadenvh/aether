@@ -1,0 +1,43 @@
+name: verify
+
+# AETHER offline verification tier (U14, R14): runs the Kani proofs and the
+# Apalache model check. These gate the synthesized-code *templates* and the
+# ledger state machine at admission time — never on the request path.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  kani:
+    name: Kani proof harnesses
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Kani
+        run: |
+          cargo install --locked kani-verifier
+          cargo kani setup
+      - name: Run proofs
+        working-directory: verification/kani
+        run: cargo kani --default-unwind 1
+
+  apalache:
+    name: Apalache ledger model check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Install Apalache
+        run: |
+          curl -fsSL https://github.com/apalache-mc/apalache/releases/latest/download/apalache.tgz -o /tmp/apalache.tgz
+          tar -xzf /tmp/apalache.tgz -C "$HOME"
+          echo "$HOME/apalache/bin" >> "$GITHUB_PATH"
+      - name: Check ledger spec
+        working-directory: verification/tla
+        run: apalache-mc check --config=ledger.cfg --length=6 ledger.tla

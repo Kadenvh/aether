@@ -1,0 +1,11 @@
+# Standalone (own empty [workspace]) so the main `cargo build`/`cargo test`
+# never build it without Kani; CI runs `cargo kani` here (U14).
+[workspace]
+
+[package]
+name = "aether-kani"
+version = "0.1.0"
+edition = "2021"
+description = "AETHER offline tier: Kani proof harnesses over synthesized-code templates (U14, R14)."
+
+[dependencies]
