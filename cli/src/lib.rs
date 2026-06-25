@@ -4,6 +4,8 @@
 //! end-to-end runtime path directly; the `aether` binary (`main.rs`) is a thin
 //! shell over these modules.
 
+pub mod daemon;
 pub mod hitlc;
 pub mod orchestrator;
 pub mod run;
+pub mod watch;
