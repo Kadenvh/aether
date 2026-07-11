@@ -36,6 +36,15 @@ pub const SELECT_ALL: &str = r#"
 :order idx
 "#;
 
+/// The tail of the chain: the latest event's `idx` + `curr_hash` only (one row).
+/// Used by append/`latest_hash` so they are O(1)-ish instead of materializing every
+/// event each call (the former O(n²)-per-append cost). `idx` is the relation key, so
+/// `max(idx)` is cheap; only the single tail row is fetched and no payloads are parsed.
+pub const SELECT_TAIL: &str = r#"
+maxidx[max(idx)] := *events{idx}
+?[idx, curr_hash] := maxidx[idx], *events{idx, curr_hash}
+"#;
+
 /// Append one event (parameters bound by [`crate::cozo_store`]).
 pub const PUT_EVENT: &str = r#"
 ?[idx, id, tx_time, valid_from, valid_to, kind, payload, prev_hash, curr_hash] <-

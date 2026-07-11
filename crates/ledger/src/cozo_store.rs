@@ -16,7 +16,7 @@ use aether_sdk::types::{EventKind, Ledger, LedgerEvent};
 use aether_sdk::{AetherError, Result, Timestamp};
 
 use crate::hashchain::{self, GENESIS_HASH};
-use crate::schema::{CREATE_EVENTS, EVENTS_RELATION, PUT_EVENT, SELECT_ALL};
+use crate::schema::{CREATE_EVENTS, EVENTS_RELATION, PUT_EVENT, SELECT_ALL, SELECT_TAIL};
 use crate::temporal;
 
 /// The Unified Semantic Ledger backed by an on-disk CozoDB/SQLite database.
@@ -72,15 +72,37 @@ impl CozoLedger {
         let rows = self.run(SELECT_ALL, BTreeMap::new(), false)?;
         rows.rows.iter().map(|row| row_to_event(row)).collect()
     }
+
+    /// The chain tail — latest `(idx, curr_hash)` only, or `None` if empty. O(1)-ish:
+    /// fetches a single row and parses no payloads (vs `all_events`, which materializes
+    /// the whole stream — the source of the former O(n²)-per-append cost).
+    fn tail(&self) -> Result<Option<(i64, String)>> {
+        let rows = self.run(SELECT_TAIL, BTreeMap::new(), false)?;
+        match rows.rows.first() {
+            None => Ok(None),
+            Some(row) => {
+                let idx = row
+                    .first()
+                    .and_then(DataValue::get_int)
+                    .ok_or_else(|| AetherError::Ledger("tail idx not an int".into()))?;
+                let curr_hash = row
+                    .get(1)
+                    .and_then(DataValue::get_str)
+                    .map(str::to_string)
+                    .ok_or_else(|| AetherError::Ledger("tail curr_hash not a string".into()))?;
+                Ok(Some((idx, curr_hash)))
+            }
+        }
+    }
 }
 
 impl Ledger for CozoLedger {
     fn append_event(&mut self, mut event: LedgerEvent) -> Result<()> {
-        let existing = self.all_events()?;
-        let idx = existing.len() as i64;
-        event.prev_hash = existing
-            .last()
-            .map(|e| e.curr_hash.clone())
+        // O(1)-ish tail lookup (was: materialize all events → O(n²) over a run of appends).
+        let tail = self.tail()?;
+        let idx = tail.as_ref().map_or(0, |(i, _)| i + 1);
+        event.prev_hash = tail
+            .map(|(_, hash)| hash)
             .unwrap_or_else(|| GENESIS_HASH.to_string());
         let event = event.sealed();
 
@@ -119,9 +141,8 @@ impl Ledger for CozoLedger {
     }
 
     fn latest_hash(&self) -> Option<String> {
-        self.all_events()
-            .ok()
-            .and_then(|events| events.last().map(|e| e.curr_hash.clone()))
+        // O(1)-ish: the tail row only (was: materialize every event).
+        self.tail().ok().flatten().map(|(_, curr_hash)| curr_hash)
     }
 
     fn query_as_of(&self, tx_time: Timestamp, valid_time: Timestamp) -> Result<Vec<LedgerEvent>> {
